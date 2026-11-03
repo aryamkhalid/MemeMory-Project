@@ -6,90 +6,144 @@
     <title>MemeMory - Upload Meme</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+
+<body data-protected="true">
+
     <div class="app-container" style="display: flex; flex-direction: column; justify-content: space-between; min-height: 95vh; max-width: 480px; margin: 0 auto; padding: 15px; box-sizing: border-box;">
+
         <div style="width: 100%;">
+
             <!-- Header Bar -->
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+
                 <a href="home.html">
                     <img src="images/logo.png" alt="MemeMory Logo" style="height: 26px; width: auto; display: block;">
                 </a>
-                <a href="home.html" style="text-decoration: none; font-size: 13px; color: #666; font-weight: 500;">Cancel</a>
+
+                <a href="home.html" style="text-decoration: none; font-size: 13px; color: #666; font-weight: 500;">
+                    Cancel
+                </a>
+
             </div>
 
-            <!-- Form Container -->
+            <!-- Upload Form -->
             <form id="uploadForm" onsubmit="saveMemeToLocalStorage(event)" style="display: flex; flex-direction: column; gap: 15px;">
-                
-                <!-- Image Upload Field -->
+
+                <!-- Image -->
                 <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="font-size: 13px; font-weight: 600; color: #333;">Select Meme Image (PNG/JPG up to 5MB)</label>
+
+                    <label style="font-size: 13px; font-weight: 600; color: #333;">
+                        Select Meme Image (PNG/JPG up to 5MB)
+                    </label>
+
                     <input type="file" id="memeImage" accept="image/png, image/jpeg" style="padding: 10px; border: 1px dashed #007bff; border-radius: 6px; background-color: #f8f9fa; font-size: 13px;">
+
                 </div>
 
-                <!-- Title Field -->
+                <!-- Title -->
                 <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="font-size: 13px; font-weight: 600; color: #333;">Title</label>
+
+                    <label style="font-size: 13px; font-weight: 600; color: #333;">
+                        Title
+                    </label>
+
                     <input type="text" id="memeTitle" name="title" placeholder="e.g., Pointer in C++" required style="padding: 9px; border-radius: 6px; border: 1px solid #ccc; font-size: 13px; outline: none;">
+
                 </div>
 
-                <!-- Course Tag Field -->
+                <!-- Course Tag -->
                 <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="font-size: 13px; font-weight: 600; color: #333;">Course Tag</label>
+
+                    <label style="font-size: 13px; font-weight: 600; color: #333;">
+                        Course Tag
+                    </label>
+
                     <input type="text" id="memeCourse" name="course" placeholder="e.g., IT320" required style="padding: 9px; border-radius: 6px; border: 1px solid #ccc; font-size: 13px; outline: none;">
+
                 </div>
 
-                <!-- Description Field -->
+                <!-- Description -->
                 <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="font-size: 13px; font-weight: 600; color: #333;">Short Description (Optional)</label>
+
+                    <label style="font-size: 13px; font-weight: 600; color: #333;">
+                        Short Description (Optional)
+                    </label>
+
                     <textarea id="memeDesc" name="description" placeholder="Add a brief explanation..." rows="3" style="padding: 9px; border-radius: 6px; border: 1px solid #ccc; font-size: 13px; outline: none; resize: none;"></textarea>
+
                 </div>
 
-                <!-- Submit Button -->
                 <button type="submit" style="margin-top: 5px; padding: 11px; background-color: #007bff; color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer;">
                     Publish Meme
                 </button>
+
             </form>
+
         </div>
 
-        <!-- Bottom Navigation Bar -->
+        <!-- Bottom Navigation -->
         <div style="border-top: 1px solid #eee; padding-top: 12px; display: flex; justify-content: space-around; width: 100%; align-items: center; background-color: #fff; margin-top: 20px;">
+
             <a href="home.html" title="Home" style="text-decoration: none; padding: 6px 12px; display: flex; align-items: center;">
                 <img src="images/home-icon.png" alt="Home" style="width: 22px; height: 22px; display: block; opacity: 0.6;">
             </a>
+
             <a href="upload.html" title="Create" style="text-decoration: none; background-color: #f0f4f8; padding: 6px 12px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,123,255,0.15); display: flex; align-items: center;">
                 <img src="images/create-icon.png" alt="Create" style="width: 22px; height: 22px; display: block;">
             </a>
+
             <a href="profile.html" title="Profile" style="text-decoration: none; padding: 6px 12px; display: flex; align-items: center;">
                 <img src="images/profile-icon.png" alt="Profile" style="width: 22px; height: 22px; display: block; opacity: 0.6;">
             </a>
+
         </div>
+
     </div>
 
-    <!-- JavaScript for LocalStorage Saving & Redirecting to Home -->
+    <!-- Temporary Upload Code -->
     <script>
         function saveMemeToLocalStorage(event) {
             event.preventDefault();
 
-            const title = document.getElementById('memeTitle').value;
-            const course = document.getElementById('memeCourse').value;
-            const description = document.getElementById('memeDesc').value;
-            const imageInput = document.getElementById('memeImage');
+            const title = document.getElementById("memeTitle").value;
+            const course = document.getElementById("memeCourse").value;
+            const description = document.getElementById("memeDesc").value;
+            const imageInput = document.getElementById("memeImage");
 
-            let imageSrc = "images/meme1.png"; // صورة افتراضية كاحتياط
+            let imageSrc = "images/meme1.png";
 
             if (imageInput.files && imageInput.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    imageSrc = e.target.result;
-                    saveDataAndRedirect(title, course, description, imageSrc);
+
+                reader.onload = function(event) {
+                    imageSrc = event.target.result;
+
+                    saveDataAndRedirect(
+                        title,
+                        course,
+                        description,
+                        imageSrc
+                    );
                 };
+
                 reader.readAsDataURL(imageInput.files[0]);
+
             } else {
-                saveDataAndRedirect(title, course, description, imageSrc);
+                saveDataAndRedirect(
+                    title,
+                    course,
+                    description,
+                    imageSrc
+                );
             }
         }
 
-        function saveDataAndRedirect(title, course, description, imageSrc) {
+        function saveDataAndRedirect(
+            title,
+            course,
+            description,
+            imageSrc
+        ) {
             const newMeme = {
                 title: title,
                 course: course,
@@ -97,13 +151,22 @@
                 image: imageSrc
             };
 
-            let savedMemes = JSON.parse(localStorage.getItem('userMemes')) || [];
-            savedMemes.unshift(newMeme);
-            localStorage.setItem('userMemes', JSON.stringify(savedMemes));
+            const savedMemes =
+                JSON.parse(localStorage.getItem("userMemes")) || [];
 
-            // التوجيه المباشر لصفحة الهوم بعد اكتمال الحفظ
+            savedMemes.unshift(newMeme);
+
+            localStorage.setItem(
+                "userMemes",
+                JSON.stringify(savedMemes)
+            );
+
             window.location.href = "home.html";
         }
     </script>
+
+    <!-- Firebase Authentication Guard -->
+    <script type="module" src="auth.js"></script>
+
 </body>
 </html>
