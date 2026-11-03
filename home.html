@@ -6,114 +6,187 @@
     <title>MemeMory - Home</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+
+<body data-protected="true">
+
     <div class="app-container" style="display: flex; flex-direction: column; justify-content: space-between; max-width: 485px; margin: 0 auto; padding: 15px; min-height: 95vh; box-sizing: border-box;">
+
         <div style="width: 100%;" id="mainFeedContainer">
-            
-            <!-- Header Bar (Logo + Search Only) -->
+
+            <!-- Header -->
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; gap: 10px;">
+
                 <a href="home.html" style="display: flex; align-items: center;">
                     <img src="images/logo.png" alt="MemeMory Logo" style="height: 26px; width: auto; display: block;">
                 </a>
+
                 <div style="flex: 1;">
                     <input type="text" placeholder="Search course or keyword..." style="width: 100%; padding: 7px 12px; border-radius: 20px; border: 1px solid #ccc; font-size: 12px; outline: none; box-sizing: border-box;">
                 </div>
+
             </div>
 
-            <!-- حاوية الميمز المرفوعة ديناميكياً بواسطة LocalStorage -->
+            <!-- Dynamic Memes -->
             <div id="dynamicMemesContainer"></div>
 
-            <!-- MEME CARD 1: Calculus (Math) -->
+            <!-- Meme Card 1 -->
             <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 15px; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+
                     <div>
                         <span style="font-size: 13px; font-weight: 700; color: #007bff; display: block;">You (My Post)</span>
-                        <span style="font-size: 12px; font-weight: 600; color: #333;">Calculus 1 • <small style="color: #666;">IT320</small></span>
+                        <span style="font-size: 12px; font-weight: 600; color: #333;">
+                            Calculus 1 • <small style="color: #666;">IT320</small>
+                        </span>
                     </div>
+
                     <div style="display: flex; gap: 10px; align-items: center;">
-                        <button title="Edit" style="background: none; border: none; cursor: pointer; padding: 0;"><img src="images/edit-icon.png" alt="Edit" style="width: 18px; height: 18px; display: block;"></button>
-                        <button title="Like" style="background: none; border: none; cursor: pointer; padding: 0;"><img src="images/like-icon.png" alt="Like" style="width: 18px; height: 18px; display: block;"></button>
-                        <button title="Report" style="background: none; border: none; cursor: pointer; padding: 0;"><img src="images/flag-icon.png" alt="Report" style="width: 18px; height: 18px; display: block;"></button>
+
+                        <button title="Edit" style="background: none; border: none; cursor: pointer; padding: 0;">
+                            <img src="images/edit-icon.png" alt="Edit" style="width: 18px; height: 18px; display: block;">
+                        </button>
+
+                        <button title="Like" style="background: none; border: none; cursor: pointer; padding: 0;">
+                            <img src="images/like-icon.png" alt="Like" style="width: 18px; height: 18px; display: block;">
+                        </button>
+
+                        <button title="Report" style="background: none; border: none; cursor: pointer; padding: 0;">
+                            <img src="images/flag-icon.png" alt="Report" style="width: 18px; height: 18px; display: block;">
+                        </button>
+
                     </div>
+
                 </div>
 
                 <a href="meme-detail.html?type=math" style="text-decoration: none; display: block;">
                     <img src="images/meme1.png" alt="Calculus Meme" style="width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 8px; display: block; border: 1px solid #eee;">
                 </a>
-                <p style="font-size: 12px; color: #444; margin: 0;">Inverse functions memory trick for Calculus 1.</p>
+
+                <p style="font-size: 12px; color: #444; margin: 0;">
+                    Inverse functions memory trick for Calculus 1.
+                </p>
+
             </div>
 
-            <!-- MEME CARD 2: Java Programming -->
+            <!-- Meme Card 2 -->
             <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 15px; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+
                     <div>
-                        <span style="font-size: 13px; font-weight: 700; color: #333; display: block;">Sarah Al-Otaibi</span>
-                        <span style="font-size: 12px; font-weight: 600; color: #333;">Object-Oriented Programming (Java) • <small style="color: #666;">IT212</small></span>
+                        <span style="font-size: 13px; font-weight: 700; color: #333; display: block;">
+                            Sarah Al-Otaibi
+                        </span>
+
+                        <span style="font-size: 12px; font-weight: 600; color: #333;">
+                            Object-Oriented Programming (Java) •
+                            <small style="color: #666;">IT212</small>
+                        </span>
                     </div>
+
                     <div style="display: flex; gap: 10px; align-items: center;">
-                        <button title="Like" style="background: none; border: none; cursor: pointer; padding: 0;"><img src="images/like-icon.png" alt="Like" style="width: 18px; height: 18px; display: block;"></button>
-                        <button title="Report" style="background: none; border: none; cursor: pointer; padding: 0;"><img src="images/flag-icon.png" alt="Report" style="width: 18px; height: 18px; display: block;"></button>
+
+                        <button title="Like" style="background: none; border: none; cursor: pointer; padding: 0;">
+                            <img src="images/like-icon.png" alt="Like" style="width: 18px; height: 18px; display: block;">
+                        </button>
+
+                        <button title="Report" style="background: none; border: none; cursor: pointer; padding: 0;">
+                            <img src="images/flag-icon.png" alt="Report" style="width: 18px; height: 18px; display: block;">
+                        </button>
+
                     </div>
+
                 </div>
 
                 <a href="meme-detail.html?type=java" style="text-decoration: none; display: block;">
                     <img src="images/meme2.png" alt="Java Meme" style="width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 8px; display: block; border: 1px solid #eee;">
                 </a>
-                <p style="font-size: 12px; color: #444; margin: 0;">Java increment operators progression from x=x+1 to x++.</p>
+
+                <p style="font-size: 12px; color: #444; margin: 0;">
+                    Java increment operators progression from x=x+1 to x++.
+                </p>
+
             </div>
 
         </div>
 
-        <!-- Bottom Navigation Bar -->
+        <!-- Bottom Navigation -->
         <div style="border-top: 1px solid #eee; padding-top: 10px; display: flex; justify-content: space-around; width: 100%; align-items: center; background-color: #fff;">
-            <!-- Home (Active) -->
+
             <a href="home.html" title="Home" style="text-decoration: none; background-color: #f0f4f8; padding: 6px 12px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,123,255,0.15); display: flex; align-items: center;">
                 <img src="images/home-icon.png" alt="Home" style="width: 22px; height: 22px; display: block;">
             </a>
-            <!-- Create -->
+
             <a href="upload.html" title="Create" style="text-decoration: none; padding: 6px 12px; display: flex; align-items: center;">
                 <img src="images/create-icon.png" alt="Create" style="width: 22px; height: 22px; display: block; opacity: 0.6;">
             </a>
-            <!-- Profile -->
+
             <a href="profile.html" title="Profile" style="text-decoration: none; padding: 6px 12px; display: flex; align-items: center;">
                 <img src="images/profile-icon.png" alt="Profile" style="width: 22px; height: 22px; display: block; opacity: 0.6;">
             </a>
+
         </div>
+
     </div>
 
-    <!-- JavaScript to Load and Display LocalStorage Memes Instantly -->
+    <!-- Existing Temporary Meme Code -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const container = document.getElementById('dynamicMemesContainer');
-            let savedMemes = JSON.parse(localStorage.getItem('userMemes')) || [];
+            const container = document.getElementById("dynamicMemesContainer");
+            const savedMemes =
+                JSON.parse(localStorage.getItem("userMemes")) || [];
 
-            if (savedMemes.length > 0) {
-                savedMemes.forEach(meme => {
-                    const card = document.createElement('div');
-                    card.style.cssText = "border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 15px; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.02);";
-                    
-                    card.innerHTML = `
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <div>
-                                <span style="font-size: 13px; font-weight: 700; color: #007bff; display: block;">You (My Post)</span>
-                                <span style="font-size: 12px; font-weight: 600; color: #333;">${meme.title} • <small style="color: #666;">${meme.course}</small></span>
-                            </div>
-                            <div style="display: flex; gap: 10px; align-items: center;">
-                                <button title="Edit" style="background: none; border: none; cursor: pointer; padding: 0;"><img src="images/edit-icon.png" alt="Edit" style="width: 18px; height: 18px; display: block;"></button>
-                                <button title="Like" style="background: none; border: none; cursor: pointer; padding: 0;"><img src="images/like-icon.png" alt="Like" style="width: 18px; height: 18px; display: block;"></button>
-                                <button title="Report" style="background: none; border: none; cursor: pointer; padding: 0;"><img src="images/flag-icon.png" alt="Report" style="width: 18px; height: 18px; display: block;"></button>
-                            </div>
+            savedMemes.forEach(function(meme) {
+                const card = document.createElement("div");
+
+                card.style.cssText =
+                    "border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 15px; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.02);";
+
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div>
+                            <span style="font-size: 13px; font-weight: 700; color: #007bff; display: block;">
+                                You (My Post)
+                            </span>
+
+                            <span style="font-size: 12px; font-weight: 600; color: #333;">
+                                ${meme.title} •
+                                <small style="color: #666;">${meme.course}</small>
+                            </span>
                         </div>
-                        <div style="text-decoration: none; display: block;">
-                            <img src="${meme.image}" alt="Uploaded Meme" style="width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 8px; display: block; border: 1px solid #eee;">
+
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <button title="Edit" style="background: none; border: none; cursor: pointer; padding: 0;">
+                                <img src="images/edit-icon.png" alt="Edit" style="width: 18px; height: 18px;">
+                            </button>
+
+                            <button title="Like" style="background: none; border: none; cursor: pointer; padding: 0;">
+                                <img src="images/like-icon.png" alt="Like" style="width: 18px; height: 18px;">
+                            </button>
+
+                            <button title="Report" style="background: none; border: none; cursor: pointer; padding: 0;">
+                                <img src="images/flag-icon.png" alt="Report" style="width: 18px; height: 18px;">
+                            </button>
                         </div>
-                        <p style="font-size: 12px; color: #444; margin: 0;">${meme.description || ''}</p>
-                    `;
-                    
-                    container.appendChild(card);
-                });
-            }
+                    </div>
+
+                    <div>
+                        <img src="${meme.image}" alt="Uploaded Meme" style="width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 8px; border: 1px solid #eee;">
+                    </div>
+
+                    <p style="font-size: 12px; color: #444; margin: 0;">
+                        ${meme.description || ""}
+                    </p>
+                `;
+
+                container.appendChild(card);
+            });
         });
     </script>
+
+    <!-- Firebase Authentication Guard -->
+    <script type="module" src="auth.js"></script>
+
 </body>
 </html>

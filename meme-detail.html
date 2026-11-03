@@ -6,29 +6,56 @@
     <title>MemeMory - Meme Details</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+
+<body data-protected="true">
+
     <div class="app-container" style="display: flex; flex-direction: column; justify-content: space-between; max-width: 485px; margin: 0 auto; padding: 15px; min-height: 95vh; box-sizing: border-box;">
+
         <div style="width: 100%;">
-            
-            <!-- Header Bar (Back + Title Only, Logout Removed) -->
+
+            <!-- Header -->
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
-                <a href="home.html" style="text-decoration: none; color: #007bff; font-weight: 600; font-size: 14px;">← Back</a>
-                <span style="font-size: 14px; font-weight: 600; color: #333;">Meme Details</span>
-                <div style="width: 40px;"></div> <!-- Spacer to balance header alignment -->
+
+                <a href="home.html" style="text-decoration: none; color: #007bff; font-weight: 600; font-size: 14px;">
+                    ← Back
+                </a>
+
+                <span style="font-size: 14px; font-weight: 600; color: #333;">
+                    Meme Details
+                </span>
+
+                <div style="width: 40px;"></div>
+
             </div>
 
-            <!-- Meme Details Container -->
+            <!-- Meme Details -->
             <div style="background-color: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px;">
-                
+
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+
                     <div>
-                        <span id="authorName" style="font-size: 14px; font-weight: 700; color: #007bff; display: block;">You (My Post)</span>
-                        <span id="courseName" style="font-size: 13px; font-weight: 600; color: #333;">Calculus 1 • <small style="color: #666;">IT320</small></span>
+                        <span id="authorName" style="font-size: 14px; font-weight: 700; color: #007bff; display: block;">
+                            You (My Post)
+                        </span>
+
+                        <span id="courseName" style="font-size: 13px; font-weight: 600; color: #333;">
+                            Calculus 1 •
+                            <small style="color: #666;">IT320</small>
+                        </span>
                     </div>
+
                     <div style="display: flex; gap: 10px; align-items: center;">
-                        <button title="Like" style="background: none; border: none; cursor: pointer; padding: 0;"><img src="images/like-icon.png" alt="Like" style="width: 20px; height: 20px; display: block;"></button>
-                        <button title="Report" style="background: none; border: none; cursor: pointer; padding: 0;"><img src="images/flag-icon.png" alt="Report" style="width: 20px; height: 20px; display: block;"></button>
+
+                        <button title="Like" style="background: none; border: none; cursor: pointer; padding: 0;">
+                            <img src="images/like-icon.png" alt="Like" style="width: 20px; height: 20px; display: block;">
+                        </button>
+
+                        <button title="Report" style="background: none; border: none; cursor: pointer; padding: 0;">
+                            <img src="images/flag-icon.png" alt="Report" style="width: 20px; height: 20px; display: block;">
+                        </button>
+
                     </div>
+
                 </div>
 
                 <div style="width: 100%; margin-bottom: 15px;">
@@ -36,53 +63,87 @@
                 </div>
 
                 <div style="border-top: 1px solid #f0f0f0; padding-top: 12px;">
-                    <h4 style="margin: 0 0 6px 0; font-size: 14px; color: #111;">Full Study Description</h4>
+
+                    <h4 style="margin: 0 0 6px 0; font-size: 14px; color: #111;">
+                        Full Study Description
+                    </h4>
+
                     <p id="memeDesc" style="font-size: 13px; color: #444; line-height: 1.6; margin: 0;">
                         Loading description...
                     </p>
+
                 </div>
+
             </div>
+
         </div>
 
-        <!-- Bottom Navigation Bar -->
+        <!-- Bottom Navigation -->
         <div style="border-top: 1px solid #eee; padding-top: 10px; display: flex; justify-content: space-around; width: 100%; align-items: center; background-color: #fff; margin-top: 20px;">
-            <!-- Home -->
+
             <a href="home.html" title="Home" style="text-decoration: none; padding: 6px 12px; display: flex; align-items: center;">
                 <img src="images/home-icon.png" alt="Home" style="width: 22px; height: 22px; display: block; opacity: 0.6;">
             </a>
-            <!-- Create -->
+
             <a href="upload.html" title="Create" style="text-decoration: none; padding: 6px 12px; display: flex; align-items: center;">
                 <img src="images/create-icon.png" alt="Create" style="width: 22px; height: 22px; display: block; opacity: 0.6;">
             </a>
-            <!-- Profile -->
+
             <a href="profile.html" title="Profile" style="text-decoration: none; padding: 6px 12px; display: flex; align-items: center;">
                 <img src="images/profile-icon.png" alt="Profile" style="width: 22px; height: 22px; display: block; opacity: 0.6;">
             </a>
+
         </div>
+
     </div>
 
+    <!-- Temporary Meme Details Code -->
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const memeType = urlParams.get('type');
+        const urlParams =
+            new URLSearchParams(window.location.search);
 
-        const memeImage = document.getElementById('memeImage');
-        const memeDesc = document.getElementById('memeDesc');
-        const authorName = document.getElementById('authorName');
-        const courseName = document.getElementById('courseName');
+        const memeType = urlParams.get("type");
 
-        if (memeType === 'java') {
-            memeImage.src = 'images/meme2.png';
-            authorName.innerText = 'Sarah Al-Otaibi';
-            authorName.style.color = '#333';
-            courseName.innerHTML = 'Object-Oriented Programming (Java) • <small style="color: #666;">IT212</small>';
-            memeDesc.innerText = 'A classic programming progression in Java showing the evolution of incrementing a variable by 1. Starting from standard assignment (x = x + 1), moving to compound assignment (x += 1), and reaching peak elegance with the increment operator (x++)!';
+        const memeImage =
+            document.getElementById("memeImage");
+
+        const memeDesc =
+            document.getElementById("memeDesc");
+
+        const authorName =
+            document.getElementById("authorName");
+
+        const courseName =
+            document.getElementById("courseName");
+
+        if (memeType === "java") {
+            memeImage.src = "images/meme2.png";
+
+            authorName.innerText = "Sarah Al-Otaibi";
+            authorName.style.color = "#333";
+
+            courseName.innerHTML =
+                'Object-Oriented Programming (Java) • <small style="color: #666;">IT212</small>';
+
+            memeDesc.innerText =
+                "A classic programming progression in Java showing the evolution of incrementing a variable by 1. Starting from standard assignment (x = x + 1), moving to compound assignment (x += 1), and reaching peak elegance with the increment operator (x++)!";
+
         } else {
-            memeImage.src = 'images/meme1.png';
-            authorName.innerText = 'You (My Post)';
-            authorName.style.color = '#007bff';
-            courseName.innerHTML = 'Calculus 1 • <small style="color: #666;">IT320</small>';
-            memeDesc.innerText = 'A funny memory trick illustrating how inverse functions (f⁻¹(x)) completely reverse the input and output dynamics of the original function f(x) in Calculus 1! Perfect for remembering domain and range swapping.';
+            memeImage.src = "images/meme1.png";
+
+            authorName.innerText = "You (My Post)";
+            authorName.style.color = "#007bff";
+
+            courseName.innerHTML =
+                'Calculus 1 • <small style="color: #666;">IT320</small>';
+
+            memeDesc.innerText =
+                "A funny memory trick illustrating how inverse functions completely reverse the input and output dynamics of the original function in Calculus 1. Perfect for remembering domain and range swapping.";
         }
     </script>
+
+    <!-- Firebase Authentication Guard -->
+    <script type="module" src="auth.js"></script>
+
 </body>
 </html>

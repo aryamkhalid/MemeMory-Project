@@ -6,38 +6,67 @@
     <title>MemeMory - Favorites</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+
+<body data-protected="true">
+
     <div class="app-container" style="display: flex; flex-direction: column; justify-content: space-between; max-width: 485px; margin: 0 auto; padding: 15px; min-height: 95vh; box-sizing: border-box;">
+
         <div style="width: 100%;">
-            
-            <!-- Header Bar with Centered Title -->
+
+            <!-- Header -->
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
-                <a href="profile.html" style="text-decoration: none; color: #007bff; font-weight: 600; font-size: 14px; width: 110px;">← Back</a>
-                <span style="font-size: 15px; font-weight: 700; color: #333; text-align: center; flex: 1;">Favorites</span>
+
+                <a href="profile.html" style="text-decoration: none; color: #007bff; font-weight: 600; font-size: 14px; width: 110px;">
+                    ← Back
+                </a>
+
+                <span style="font-size: 15px; font-weight: 700; color: #333; text-align: center; flex: 1;">
+                    Favorites
+                </span>
+
                 <div style="width: 110px;"></div>
+
             </div>
 
-            <!-- Empty State Message -->
+            <!-- Empty State -->
             <div style="text-align: center; margin-top: 80px; color: #666;">
-                <div style="font-size: 40px; margin-bottom: 10px;">♡</div>
-                <p style="font-size: 14px; font-weight: 500; margin: 0;">No favorite memes yet.</p>
-                <p style="font-size: 12px; color: #999; margin-top: 5px;">Memes you like will appear here.</p>
+
+                <div style="font-size: 40px; margin-bottom: 10px;">
+                    ♡
+                </div>
+
+                <p style="font-size: 14px; font-weight: 500; margin: 0;">
+                    No favorite memes yet.
+                </p>
+
+                <p style="font-size: 12px; color: #999; margin-top: 5px;">
+                    Memes you like will appear here.
+                </p>
+
             </div>
 
         </div>
 
-        <!-- Bottom Navigation Bar -->
+        <!-- Bottom Navigation -->
         <div style="border-top: 1px solid #eee; padding-top: 12px; display: flex; justify-content: space-around; width: 100%; align-items: center; background-color: #fff; margin-top: 20px;">
+
             <a href="home.html" title="Home" style="text-decoration: none; padding: 6px 12px; display: flex; align-items: center;">
                 <img src="images/home-icon.png" alt="Home" style="width: 22px; height: 22px; display: block; opacity: 0.6;">
             </a>
+
             <a href="upload.html" title="Create" style="text-decoration: none; padding: 6px 12px; display: flex; align-items: center;">
                 <img src="images/create-icon.png" alt="Create" style="width: 22px; height: 22px; display: block; opacity: 0.6;">
             </a>
+
             <a href="profile.html" title="Profile" style="text-decoration: none; background-color: #f0f4f8; padding: 6px 12px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,123,255,0.15); display: flex; align-items: center;">
                 <img src="images/profile-icon.png" alt="Profile" style="width: 22px; height: 22px; display: block;">
             </a>
+
         </div>
+
     </div>
+
+    <script type="module" src="auth.js"></script>
+
 </body>
 </html>
