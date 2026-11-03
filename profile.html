@@ -6,76 +6,120 @@
     <title>MemeMory - Profile</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+
+<body data-protected="true">
+
     <div class="app-container" style="display: flex; flex-direction: column; justify-content: space-between; max-width: 485px; margin: 0 auto; padding: 15px; min-height: 95vh; box-sizing: border-box;">
+
         <div style="width: 100%;">
-            
-            <!-- Header Bar with Centered Title -->
+
+            <!-- Header Bar -->
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+
                 <a href="home.html" style="width: 100px; display: block;">
                     <img src="images/logo.png" alt="MemeMory Logo" style="height: 26px; width: auto; display: block;">
                 </a>
-                <span style="font-size: 15px; font-weight: 700; color: #333; text-align: center; flex: 1;">Profile</span>
-                <a href="index.html" title="Logout" style="text-decoration: none; width: 100px; text-align: right;">
+
+                <span style="font-size: 15px; font-weight: 700; color: #333; text-align: center; flex: 1;">
+                    Profile
+                </span>
+
+                <a href="#" id="logoutButton" title="Logout" style="text-decoration: none; width: 100px; text-align: right;">
                     <img src="images/logout-icon.png" alt="Logout" style="width: 20px; height: 20px; display: inline-block; margin-left: auto;">
                 </a>
+
             </div>
 
-            <!-- Profile Info Banner (User Details) -->
+            <!-- Profile Information -->
             <div style="background-color: #eef2ff; border-radius: 16px; padding: 20px 15px; text-align: center; margin-bottom: 25px;">
+
                 <div style="width: 60px; height: 60px; background-color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px auto; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">
                     <img src="images/profile-icon.png" alt="User Avatar" style="width: 30px; height: 30px;">
                 </div>
-                <h3 style="margin: 0 0 4px 0; font-size: 17px; font-weight: 700; color: #1e1b4b;">IT Student</h3>
-                <p style="margin: 0; font-size: 12px; color: #4b5563;">Information Technology • KSU</p>
+
+                <h3 style="margin: 0 0 4px 0; font-size: 17px; font-weight: 700; color: #1e1b4b;">
+                    IT Student
+                </h3>
+
+                <p style="margin: 0; font-size: 12px; color: #4b5563;">
+                    Information Technology
+                </p>
+
             </div>
 
-            <!-- Options List Container -->
+            <!-- Options -->
             <div style="display: flex; flex-direction: column; gap: 15px;">
-                
-                <!-- Card 1: Favorites -->
+
+                <!-- Favorites -->
                 <a href="favorites.html" style="text-decoration: none; color: inherit; display: block;">
+
                     <div style="border: 1px solid #e5e7eb; border-radius: 16px; padding: 18px 20px; background-color: #fff; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+
                         <span style="font-size: 18px; color: #9ca3af; font-weight: bold;">‹</span>
+
                         <div style="text-align: right; flex: 1; padding: 0 15px;">
-                            <div style="font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 3px;">Favorites</div>
-                            <div style="font-size: 12px; color: #6b7280;">View saved favorite memes</div>
+                            <div style="font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 3px;">
+                                Favorites
+                            </div>
+
+                            <div style="font-size: 12px; color: #6b7280;">
+                                View saved favorite memes
+                            </div>
                         </div>
+
                         <div style="font-size: 20px; color: #007bff;">♡</div>
+
                     </div>
+
                 </a>
 
-                <!-- Card 2: My Posts -->
+                <!-- My Posts -->
                 <a href="myposts.html" style="text-decoration: none; color: inherit; display: block;">
+
                     <div style="border: 1px solid #e5e7eb; border-radius: 16px; padding: 18px 20px; background-color: #fff; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+
                         <span style="font-size: 18px; color: #9ca3af; font-weight: bold;">‹</span>
+
                         <div style="text-align: right; flex: 1; padding: 0 15px;">
-                            <div style="font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 3px;">My Posts</div>
-                            <div style="font-size: 12px; color: #6b7280;">Manage your uploaded memes</div>
+                            <div style="font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 3px;">
+                                My Posts
+                            </div>
+
+                            <div style="font-size: 12px; color: #6b7280;">
+                                Manage your uploaded memes
+                            </div>
                         </div>
+
                         <div style="font-size: 18px; color: #007bff;">📄</div>
+
                     </div>
+
                 </a>
 
             </div>
 
         </div>
 
-        <!-- Bottom Navigation Bar (Active on Profile) -->
+        <!-- Bottom Navigation -->
         <div style="border-top: 1px solid #eee; padding-top: 12px; display: flex; justify-content: space-around; width: 100%; align-items: center; background-color: #fff; margin-top: 25px;">
-            <!-- Home -->
+
             <a href="home.html" title="Home" style="text-decoration: none; padding: 6px 12px; display: flex; align-items: center;">
                 <img src="images/home-icon.png" alt="Home" style="width: 22px; height: 22px; display: block; opacity: 0.6;">
             </a>
-            <!-- Create -->
+
             <a href="upload.html" title="Create" style="text-decoration: none; padding: 6px 12px; display: flex; align-items: center;">
                 <img src="images/create-icon.png" alt="Create" style="width: 22px; height: 22px; display: block; opacity: 0.6;">
             </a>
-            <!-- Profile (Active) -->
+
             <a href="profile.html" title="Profile" style="text-decoration: none; background-color: #f0f4f8; padding: 6px 12px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,123,255,0.15); display: flex; align-items: center;">
                 <img src="images/profile-icon.png" alt="Profile" style="width: 22px; height: 22px; display: block;">
             </a>
+
         </div>
+
     </div>
+
+    <script type="module" src="auth.js"></script>
+
 </body>
 </html>
