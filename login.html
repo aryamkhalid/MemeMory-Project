@@ -52,26 +52,6 @@
 
     </div>
 
-    <!-- JavaScript to Validate Login from LocalStorage -->
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // منع الإرسال الافتراضي
-
-            const emailInput = document.getElementById('email').value;
-            const passwordInput = document.getElementById('password').value;
-
-            // جلب بيانات المستخدم المخزنة مسبقاً من صفحة التسجيل
-            const savedUser = JSON.parse(localStorage.getItem('registeredUser'));
-
-            // التحقق من صحة البيانات (أو السماح بحساب تجريبي افتراضي إن لم تقم بالتسجيل بعد)
-            if (savedUser && savedUser.email === emailInput && savedUser.password === passwordInput) {
-                // إذا كانت البيانات صحيحة، انتقل إلى صفحة الهوم
-                window.location.href = "home.html";
-            } else {
-                // إظهار رسالة خطأ (Error) إذا كانت البيانات خاطئة
-                alert("Error: Incorrect email or password. Please try again or register first!");
-            }
-        });
-    </script>
+<script type="module" src="auth.js"></script>
 </body>
 </html>
