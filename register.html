@@ -53,28 +53,6 @@
 
     </div>
 
-    <!-- JavaScript to Save Data to LocalStorage -->
-    <script>
-        document.getElementById('registerForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // منع الإرسال التقليدي عشان نقدر نحفظ البيانات
-
-            const fullname = document.getElementById('fullname').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            // تجميع بيانات المستخدم في كائن (Object)
-            const userData = {
-                fullname: fullname,
-                email: email,
-                password: password
-            };
-
-            // حفظ البيانات في الـ LocalStorage
-            localStorage.setItem('registeredUser', JSON.stringify(userData));
-
-            // التوجيه إلى صفحة تسجيل الدخول أو الهوم بعد التسجيل الناجح
-            window.location.href = "login.html";
-        });
-    </script>
+       <script type="module" src="auth.js"></script>
 </body>
 </html>
