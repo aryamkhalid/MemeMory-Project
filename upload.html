@@ -105,10 +105,15 @@
         function saveMemeToLocalStorage(event) {
             event.preventDefault();
 
-            const title = document.getElementById("memeTitle").value;
-            const course = document.getElementById("memeCourse").value;
+            const title = document.getElementById("memeTitle").value.trim();
+            const course = document.getElementById("memeCourse").value.trim();
             const description = document.getElementById("memeDesc").value;
             const imageInput = document.getElementById("memeImage");
+            
+            if (!title || !course) {
+                alert("Please enter a valid title and course tag.");
+            return;
+            }
 
             const imageFile = imageInput.files[0];
 
