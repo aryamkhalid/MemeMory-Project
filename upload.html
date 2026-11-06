@@ -109,24 +109,27 @@
             const course = document.getElementById("memeCourse").value.trim();
             const description = document.getElementById("memeDesc").value;
             const imageInput = document.getElementById("memeImage");
-            
+            // Title and course tag are required.
+            // Prevent users from submitting empty or whitespace-only values.
             if (!title || !course) {
                 alert("Please enter a valid title and course tag.");
             return;
             }
 
             const imageFile = imageInput.files[0];
-
+            
+            // A meme image is required for upload.
             if (!imageFile) {
                 alert("Please select a meme image.");
             return;
             }
-
+            
+            // Only PNG and JPG image formats are allowed.
             if (!["image/png", "image/jpeg"].includes(imageFile.type)) {
                 alert("Only PNG and JPG images are allowed.");
             return;
             }
-
+            // The uploaded image must not exceed 5MB.
             if (imageFile.size > 5 * 1024 * 1024) {
                 alert("Image size must not exceed 5MB.");
             return;
