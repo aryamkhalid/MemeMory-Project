@@ -9,7 +9,9 @@ import {
     serverTimestamp,
     query,
     where,
-    getDocs
+    getDocs,
+    getDoc,
+    updateDoc
 } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
 
 // Save a new meme using the agreed Firestore fields.
@@ -59,5 +61,41 @@ export async function getMyMemes() {
         memeId: memeDoc.id,
         ...memeDoc.data()
     }));
+}
+
+ // Edit Meme - Only the post owner can update its details.
+export async function updateMeme(memeId, { title, description, courseTag }) {
+    const user = await getCurrentUser();
+
+    if (!user) {
+        throw new Error("Please log in first.");
+    }
+
+    // Title and course tag are required.
+    const cleanTitle = title?.trim();
+    const cleanCourseTag = courseTag?.trim();
+
+    if (!memeId || !cleanTitle || !cleanCourseTag) {
+        throw new Error("Please enter a valid title and course tag.");
+    }
+
+    const memeRef = doc(db, "memes", memeId);
+    const memeSnapshot = await getDoc(memeRef);
+
+    if (!memeSnapshot.exists()) {
+        throw new Error("Meme not found.");
+    }
+
+    // Prevent users from editing someone else's post.
+    if (memeSnapshot.data().authorId !== user.uid) {
+        throw new Error("You can only edit your own memes.");
+    }
+
+    // Update the existing post without creating a new one.
+    await updateDoc(memeRef, {
+        title: cleanTitle,
+        description: description?.trim() || "",
+        courseTag: cleanCourseTag
+    });
 }
 
