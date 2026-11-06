@@ -100,10 +100,62 @@
    
 <!-- Load the current user's memes from Firestore -->
 <script type="module">
-    import { getMyMemes } from "./meme-service.js";
-
+    import { getMyMemes, updateMeme } from "./meme-service.js";
+    
     const container = document.getElementById("dynamicMyPostsContainer");
     const emptyMessage = document.getElementById("emptyMyPostsMessage");
+    
+    const editDialog = document.getElementById("editMemeDialog");
+    const editForm = document.getElementById("editMemeForm");
+    const cancelEditButton = document.getElementById("cancelEditButton");
+    const saveEditButton = editForm.querySelector('button[type="submit"]');
+    
+    let editingMemeId = null;
+    
+    // Cancel editing without saving changes.
+    cancelEditButton.addEventListener("click", () => {
+        editDialog.close();
+        editingMemeId = null;
+    });
+    
+    // Save changes to the existing meme in Firestore.
+    editForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+    
+        const title = document.getElementById("editMemeTitle").value.trim();
+        const courseTag = document.getElementById("editMemeCourse").value.trim();
+        const description = document.getElementById("editMemeDescription").value.trim();
+    
+        // Title and course tag cannot be empty.
+        if (!title || !courseTag) {
+            alert("Please enter a valid title and course tag.");
+            return;
+        }
+    
+        if (!editingMemeId) return;
+    
+        saveEditButton.disabled = true;
+    
+        try {
+            await updateMeme(editingMemeId, {
+                title,
+                courseTag,
+                description
+            });
+    
+            editDialog.close();
+            editingMemeId = null;
+    
+            // Refresh My Posts to display the updated details.
+            await loadMyPosts();
+    
+        } catch (error) {
+            console.error("Failed to update meme:", error);
+            alert("Unable to save changes. Please try again.");
+        } finally {
+            saveEditButton.disabled = false;
+        }
+    });
 
     // Load only posts owned by the signed-in user.
     async function loadMyPosts() {
@@ -162,6 +214,25 @@
                 card.querySelector(".post-description").textContent =
                     meme.description || "";
 
+                
+                const editButton = card.querySelector(".edit-post");
+                
+                // Enable editing for the current user's posts.
+                editButton.disabled = false;
+                editButton.style.cursor = "pointer";
+                
+                editButton.addEventListener("click", () => {
+                    editingMemeId = meme.memeId;
+                
+                    // Show the current meme details in the edit form.
+                    document.getElementById("editMemeTitle").value = meme.title || "";
+                    document.getElementById("editMemeCourse").value = meme.courseTag || "";
+                    document.getElementById("editMemeDescription").value = meme.description || "";
+                
+                    editDialog.showModal();
+                });
+
+                
                 container.appendChild(card);
             });
 
