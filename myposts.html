@@ -37,6 +37,46 @@
             You have not uploaded any memes yet.
             </p>
             
+            <!-- Edit Meme: Update title, course tag, and description -->
+            <dialog id="editMemeDialog"
+            style="border: none; border-radius: 12px; padding: 20px; width: 90%; max-width: 400px; box-sizing: border-box;">
+
+            <h3 style="margin-top: 0; color: #333;">Edit Meme</h3>
+
+            <form id="editMemeForm"
+                style="display: flex; flex-direction: column; gap: 15px;">
+
+                <!-- Title is required -->
+                <label for="editMemeTitle">Title</label>
+                <input type="text" id="editMemeTitle" required
+                    style="padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+
+                <!-- Course tag is required -->
+                <label for="editMemeCourse">Course Tag</label>
+                <input type="text" id="editMemeCourse" required
+                    style="padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+
+                <!-- Description is optional -->
+                <label for="editMemeDescription">Description (Optional)</label>
+                <textarea id="editMemeDescription" rows="3"
+                    style="padding: 10px; border: 1px solid #ccc; border-radius: 6px;"></textarea>
+
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+
+                    <button type="button" id="cancelEditButton"
+                        style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 6px; background: white; cursor: pointer;">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                        style="flex: 1; padding: 10px; border: none; border-radius: 6px; background: #6D28D9; color: white; cursor: pointer;">
+                        Save Changes
+                    </button>
+
+                </div>
+            </form>
+            </dialog>
+            
         </div>
 
         <!-- Bottom Navigation -->
