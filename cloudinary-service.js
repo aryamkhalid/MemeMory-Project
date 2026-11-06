@@ -1,8 +1,9 @@
 
-const CLOUD_NAME = "vtz9yqqo";
-const UPLOAD_PRESET = "mememory_upload";
+import { getCurrentUser } from "./auth.js";
 
-// Upload a PNG or JPG meme image (maximum 5MB).
+const WORKER = "https://mememory-delete.jood0505ali.workers.dev";
+
+// Upload a PNG/JPG image up to 5MB.
 export async function uploadMemeImage(file) {
     if (!file || !["image/png", "image/jpeg"].includes(file.type)) {
         throw new Error("Only PNG and JPG images are allowed.");
@@ -12,25 +13,43 @@ export async function uploadMemeImage(file) {
         throw new Error("Image size must not exceed 5MB.");
     }
 
+    const user = await getCurrentUser();
+    if (!user) throw new Error("Please log in first.");
+
+    // Get an authorized upload signature from Cloudflare.
+    const response = await fetch(`${WORKER}/sign-upload`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${await user.getIdToken()}`
+        }
+    });
+
+    const options = await response.json();
+    if (!response.ok) {
+        throw new Error(options.error || "Upload authorization failed.");
+    }
+
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", UPLOAD_PRESET);
 
-    const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-        {
-            method: "POST",
-            body: formData
-        }
+    for (const key of [
+        "api_key", "allowed_formats", "overwrite",
+        "public_id", "timestamp", "signature"
+    ]) {
+        formData.append(key, String(options[key]));
+    }
+
+    const upload = await fetch(
+        `https://api.cloudinary.com/v1_1/${options.cloud_name}/image/upload`,
+        { method: "POST", body: formData }
     );
 
-    const result = await response.json();
+    const result = await upload.json();
 
-    if (!response.ok || !result.secure_url) {
+    if (!upload.ok || !result.secure_url) {
         throw new Error(result.error?.message || "Image upload failed.");
     }
 
-    // Return the image URL and its Cloudinary identifier.
     return {
         imageUrl: result.secure_url,
         publicId: result.public_id
