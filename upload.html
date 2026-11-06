@@ -27,7 +27,7 @@
             </div>
 
             <!-- Upload Form -->
-            <form id="uploadForm" onsubmit="saveMemeToLocalStorage(event)" style="display: flex; flex-direction: column; gap: 15px;">
+            <form id="uploadForm" style="display: flex; flex-direction: column; gap: 15px;">
 
                 <!-- Image -->
                 <div style="display: flex; flex-direction: column; gap: 5px;">
@@ -36,7 +36,7 @@
                         Select Meme Image (PNG/JPG up to 5MB)
                     </label>
 
-                    <input type="file" id="memeImage" accept="image/png, image/jpeg" style="padding: 10px; border: 1px dashed #007bff; border-radius: 6px; background-color: #f8f9fa; font-size: 13px;">
+                    <input type="file" id="memeImage" accept="image/png, image/jpeg" required style="padding: 10px; border: 1px dashed #007bff; border-radius: 6px; background-color: #f8f9fa; font-size: 13px;">
 
                 </div>
 
@@ -72,6 +72,11 @@
                     <textarea id="memeDesc" name="description" placeholder="Add a brief explanation..." rows="3" style="padding: 9px; border-radius: 6px; border: 1px solid #ccc; font-size: 13px; outline: none; resize: none;"></textarea>
 
                 </div>
+    
+                <!-- Display upload success and error messages -->
+                <p id="uploadStatus" role="status" aria-live="polite"
+                   style="display: none; font-size: 13px; margin: 0;">
+                </p>
 
                 <button type="submit" style="margin-top: 5px; padding: 11px; background-color: #007bff; color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer;">
                     Publish Meme
@@ -100,70 +105,101 @@
 
     </div>
 
-    <!-- Temporary Upload Code -->
-    <script>
-        function saveMemeToLocalStorage(event) {
-            event.preventDefault();
 
-            const title = document.getElementById("memeTitle").value;
-            const course = document.getElementById("memeCourse").value;
-            const description = document.getElementById("memeDesc").value;
-            const imageInput = document.getElementById("memeImage");
+<!-- Publish memes using Cloudinary and Firebase -->
+<script type="module">
+    import { getCurrentUser } from "./auth.js";
+    import { uploadMemeImage } from "./cloudinary-service.js";
+    import { createMeme } from "./meme-service.js";
 
-            let imageSrc = "images/meme1.png";
+    const uploadForm = document.getElementById("uploadForm");
+    const publishButton = uploadForm.querySelector('button[type="submit"]');
 
-            if (imageInput.files && imageInput.files[0]) {
-                const reader = new FileReader();
+    // Display validation errors and publishing status.
+    function setUploadStatus(message, type = "error") {
+        const status = document.getElementById("uploadStatus");
 
-                reader.onload = function(event) {
-                    imageSrc = event.target.result;
+        status.textContent = message;
+        status.style.color =
+            type === "success" ? "#15803d" :
+            type === "loading" ? "#6D28D9" : "#b91c1c";
 
-                    saveDataAndRedirect(
-                        title,
-                        course,
-                        description,
-                        imageSrc
-                    );
-                };
+        status.style.display = message ? "block" : "none";
+    }
 
-                reader.readAsDataURL(imageInput.files[0]);
+    uploadForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setUploadStatus("");
 
-            } else {
-                saveDataAndRedirect(
-                    title,
-                    course,
-                    description,
-                    imageSrc
-                );
+        const title = document.getElementById("memeTitle").value.trim();
+        const courseTag = document.getElementById("memeCourse").value.trim();
+        const description = document.getElementById("memeDesc").value.trim();
+        const imageFile = document.getElementById("memeImage").files[0];
+
+        // Title and course tag are required.
+        if (!title || !courseTag) {
+            setUploadStatus("Please enter a valid title and course tag.");
+            return;
+        }
+
+        // A meme image is required.
+        if (!imageFile) {
+            setUploadStatus("Please select a meme image.");
+            return;
+        }
+
+        // Allow only PNG and JPG images.
+        if (!["image/png", "image/jpeg"].includes(imageFile.type)) {
+            setUploadStatus("Only PNG and JPG images are allowed.");
+            return;
+        }
+
+        // Reject images larger than 5MB.
+        if (imageFile.size > 5 * 1024 * 1024) {
+            setUploadStatus("Image size must not exceed 5MB.");
+            return;
+        }
+
+        publishButton.disabled = true;
+
+        try {
+            // Verify that the student is logged in.
+            const user = await getCurrentUser();
+
+            if (!user) {
+                throw new Error("Please log in before publishing.");
             }
-        }
 
-        function saveDataAndRedirect(
-            title,
-            course,
-            description,
-            imageSrc
-        ) {
-            const newMeme = {
-                title: title,
-                course: course,
-                description: description,
-                image: imageSrc
-            };
+            // Upload the image to Cloudinary.
+            setUploadStatus("Uploading image...", "loading");
+            const { imageUrl } = await uploadMemeImage(imageFile);
 
-            const savedMemes =
-                JSON.parse(localStorage.getItem("userMemes")) || [];
+            // Save the meme details in Firestore.
+            setUploadStatus("Publishing your meme...", "loading");
 
-            savedMemes.unshift(newMeme);
+            await createMeme({
+                title,
+                description,
+                courseTag,
+                imageUrl
+            });
 
-            localStorage.setItem(
-                "userMemes",
-                JSON.stringify(savedMemes)
+            setUploadStatus("Meme published successfully!", "success");
+
+            // Open My Posts to view the published meme.
+            window.location.href = "myposts.html";
+
+        } catch (error) {
+            console.error("Failed to publish meme:", error);
+
+            setUploadStatus(
+                error.message || "Unable to publish. Please try again."
             );
-
-            window.location.href = "home.html";
+        } finally {
+            publishButton.disabled = false;
         }
-    </script>
+    });
+</script>
 
     <!-- Firebase Authentication Guard -->
     <script type="module" src="auth.js"></script>

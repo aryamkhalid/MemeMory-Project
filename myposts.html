@@ -30,47 +30,53 @@
 
             <!-- Dynamic Posts -->
             <div id="dynamicMyPostsContainer"></div>
+    
+            <!-- Displayed when the user has no uploaded memes -->
+            <p id="emptyMyPostsMessage"
+               style="display: none; text-align: center; color: #666; margin-top: 60px;">
+            You have not uploaded any memes yet.
+            </p>
+            
+            <!-- Edit Meme: Update title, course tag, and description -->
+            <dialog id="editMemeDialog"
+            style="border: none; border-radius: 12px; padding: 20px; width: 90%; max-width: 400px; box-sizing: border-box;">
 
-            <!-- Static Example Post -->
-            <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 15px; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+            <h3 style="margin-top: 0; color: #333;">Edit Meme</h3>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <form id="editMemeForm"
+                style="display: flex; flex-direction: column; gap: 15px;">
 
-                    <div>
-                        <span style="font-size: 13px; font-weight: 700; color: #007bff; display: block;">
-                            You (My Post)
-                        </span>
+                <!-- Title is required -->
+                <label for="editMemeTitle">Title</label>
+                <input type="text" id="editMemeTitle" required
+                    style="padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
 
-                        <span style="font-size: 12px; font-weight: 600; color: #333;">
-                            Calculus 1 •
-                            <small style="color: #666;">IT320</small>
-                        </span>
-                    </div>
+                <!-- Course tag is required -->
+                <label for="editMemeCourse">Course Tag</label>
+                <input type="text" id="editMemeCourse" required
+                    style="padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
 
-                    <div style="display: flex; gap: 10px; align-items: center;">
+                <!-- Description is optional -->
+                <label for="editMemeDescription">Description (Optional)</label>
+                <textarea id="editMemeDescription" rows="3"
+                    style="padding: 10px; border: 1px solid #ccc; border-radius: 6px;"></textarea>
 
-                        <button title="Edit" style="background: none; border: none; cursor: pointer; padding: 0;">
-                            <img src="images/edit-icon.png" alt="Edit" style="width: 18px; height: 18px; display: block;">
-                        </button>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
 
-                        <button title="Delete" style="background: none; border: none; cursor: pointer; padding: 0; font-size: 16px; color: #dc3545; font-weight: bold;">
-                            ✕
-                        </button>
+                    <button type="button" id="cancelEditButton"
+                        style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 6px; background: white; cursor: pointer;">
+                        Cancel
+                    </button>
 
-                    </div>
+                    <button type="submit"
+                        style="flex: 1; padding: 10px; border: none; border-radius: 6px; background: #6D28D9; color: white; cursor: pointer;">
+                        Save Changes
+                    </button>
 
                 </div>
-
-                <a href="meme-detail.html?type=math" style="text-decoration: none; display: block;">
-                    <img src="images/meme1.png" alt="Calculus Meme" style="width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 8px; display: block; border: 1px solid #eee;">
-                </a>
-
-                <p style="font-size: 12px; color: #444; margin: 0;">
-                    Inverse functions memory trick for Calculus 1.
-                </p>
-
-            </div>
-
+            </form>
+            </dialog>
+            
         </div>
 
         <!-- Bottom Navigation -->
@@ -91,77 +97,182 @@
         </div>
 
     </div>
+   
+<!-- Load the current user's memes from Firestore -->
+<script type="module">
+    import { getMyMemes, updateMeme, deleteMeme } from "./meme-service.js";
+    
+    const container = document.getElementById("dynamicMyPostsContainer");
+    const emptyMessage = document.getElementById("emptyMyPostsMessage");
+    
+    const editDialog = document.getElementById("editMemeDialog");
+    const editForm = document.getElementById("editMemeForm");
+    const cancelEditButton = document.getElementById("cancelEditButton");
+    const saveEditButton = editForm.querySelector('button[type="submit"]');
+    
+    let editingMemeId = null;
+    
+    // Cancel editing without saving changes.
+    cancelEditButton.addEventListener("click", () => {
+        editDialog.close();
+        editingMemeId = null;
+    });
+    
+    // Save changes to the existing meme in Firestore.
+    editForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+    
+        const title = document.getElementById("editMemeTitle").value.trim();
+        const courseTag = document.getElementById("editMemeCourse").value.trim();
+        const description = document.getElementById("editMemeDescription").value.trim();
+    
+        // Title and course tag cannot be empty.
+        if (!title || !courseTag) {
+            alert("Please enter a valid title and course tag.");
+            return;
+        }
+    
+        if (!editingMemeId) return;
+    
+        saveEditButton.disabled = true;
+    
+        try {
+            await updateMeme(editingMemeId, {
+                title,
+                courseTag,
+                description
+            });
+    
+            editDialog.close();
+            editingMemeId = null;
+    
+            // Refresh My Posts to display the updated details.
+            await loadMyPosts();
+    
+        } catch (error) {
+            console.error("Failed to update meme:", error);
+            alert("Unable to save changes. Please try again.");
+        } finally {
+            saveEditButton.disabled = false;
+        }
+    });
 
-    <!-- Temporary My Posts Code -->
-    <script>
-        window.onload = function() {
-            const container =
-                document.getElementById("dynamicMyPostsContainer");
+    // Load only posts owned by the signed-in user.
+    async function loadMyPosts() {
+        container.replaceChildren();
+        emptyMessage.style.display = "none";
 
-            const savedMemes =
-                JSON.parse(localStorage.getItem("userMemes")) || [];
+        try {
+            const memes = await getMyMemes();
 
-            savedMemes.forEach(function(meme, index) {
+            // Show the empty message when there are no posts.
+            if (memes.length === 0) {
+                emptyMessage.style.display = "block";
+                return;
+            }
+
+            // Display each meme using the existing card design.
+            memes.forEach((meme) => {
                 const card = document.createElement("div");
+                card.dataset.memeId = meme.memeId;
 
                 card.style.cssText =
-                    "border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 15px; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.02);";
+                    "border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 15px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.02);";
 
                 card.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-
                         <div>
-                            <span style="font-size: 13px; font-weight: 700; color: #007bff; display: block;">
-                                You (My Post)
-                            </span>
-
-                            <span style="font-size: 12px; font-weight: 600; color: #333;">
-                                ${meme.title} •
-                                <small style="color: #666;">${meme.course}</small>
-                            </span>
+                            <span class="post-author" style="font-size: 13px; font-weight: 700; color: #007bff; display: block;"></span>
+                            <span class="post-heading" style="font-size: 12px; font-weight: 600; color: #333;"></span>
                         </div>
 
                         <div style="display: flex; gap: 10px; align-items: center;">
-
-                            <button title="Edit" style="background: none; border: none; cursor: pointer; padding: 0;">
+                            <button type="button" class="edit-post" title="Edit" disabled style="background: none; border: none; padding: 0;">
                                 <img src="images/edit-icon.png" alt="Edit" style="width: 18px; height: 18px; display: block;">
                             </button>
 
-                            <button onclick="deleteMeme(${index})" title="Delete" style="background: none; border: none; cursor: pointer; padding: 0; font-size: 16px; color: #dc3545; font-weight: bold;">
+                            <button type="button" class="delete-post" title="Delete" disabled style="background: none; border: none; font-size: 16px; color: #dc3545; font-weight: bold;">
                                 ✕
                             </button>
-
                         </div>
-
                     </div>
 
-                    <div>
-                        <img src="${meme.image}" alt="My Uploaded Meme" style="width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 8px; display: block; border: 1px solid #eee;">
-                    </div>
+                    <img class="post-image" alt="My Uploaded Meme" style="width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 8px; display: block; border: 1px solid #eee;">
 
-                    <p style="font-size: 12px; color: #444; margin: 0;">
-                        ${meme.description || ""}
-                    </p>
+                    <p class="post-description" style="font-size: 12px; color: #444; margin: 0;"></p>
                 `;
 
+                // Display the agreed meme fields safely.
+                card.querySelector(".post-author").textContent =
+                    meme.authorName || "You (My Post)";
+
+                card.querySelector(".post-heading").textContent =
+                    `${meme.title || ""} • ${meme.courseTag || ""}`;
+
+                card.querySelector(".post-image").src = meme.imageUrl;
+
+                card.querySelector(".post-description").textContent =
+                    meme.description || "";
+
+                
+                const editButton = card.querySelector(".edit-post");
+                
+                // Enable editing for the current user's posts.
+                editButton.disabled = false;
+                editButton.style.cursor = "pointer";
+                
+                editButton.addEventListener("click", () => {
+                    editingMemeId = meme.memeId;
+                
+                    // Show the current meme details in the edit form.
+                    document.getElementById("editMemeTitle").value = meme.title || "";
+                    document.getElementById("editMemeCourse").value = meme.courseTag || "";
+                    document.getElementById("editMemeDescription").value = meme.description || "";
+                
+                    editDialog.showModal();
+                });
+
+                const deleteButton = card.querySelector(".delete-post");
+
+                // Enable deletion for the current user's posts.
+                deleteButton.disabled = false;
+                deleteButton.style.cursor = "pointer";
+
+                deleteButton.addEventListener("click", async () => {
+                    // Ask for confirmation before deleting the meme.
+                    const confirmed = confirm(
+                        "Are you sure you want to delete this meme? This action cannot be undone."
+                    );
+
+                    if (!confirmed) return;
+
+                    deleteButton.disabled = true;
+
+                    try {
+                        await deleteMeme(meme.memeId);
+
+                        // Refresh My Posts after deletion.
+                        await loadMyPosts();
+
+                    } catch (error) {
+                        console.error("Failed to delete meme:", error);
+                        alert("Unable to delete the meme. Please try again.");
+                        deleteButton.disabled = false;
+                    }
+                });
+                
                 container.appendChild(card);
             });
-        };
 
-        function deleteMeme(index) {
-            const savedMemes =
-                JSON.parse(localStorage.getItem("userMemes")) || [];
-
-            savedMemes.splice(index, 1);
-
-            localStorage.setItem(
-                "userMemes",
-                JSON.stringify(savedMemes)
-            );
-
-            location.reload();
+        } catch (error) {
+            console.error("Failed to load My Posts:", error);
+            container.textContent =
+                "Unable to load your posts. Please try again.";
         }
-    </script>
+    }
+
+    loadMyPosts();
+</script>
 
     <!-- Firebase Authentication Guard -->
     <script type="module" src="auth.js"></script>
