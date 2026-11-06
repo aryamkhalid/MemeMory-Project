@@ -110,6 +110,23 @@
             const description = document.getElementById("memeDesc").value;
             const imageInput = document.getElementById("memeImage");
 
+            const imageFile = imageInput.files[0];
+
+            if (!imageFile) {
+                alert("Please select a meme image.");
+            return;
+            }
+
+            if (!["image/png", "image/jpeg"].includes(imageFile.type)) {
+                alert("Only PNG and JPG images are allowed.");
+            return;
+            }
+
+            if (imageFile.size > 5 * 1024 * 1024) {
+                alert("Image size must not exceed 5MB.");
+            return;
+            }
+            
             let imageSrc = "images/meme1.png";
 
             if (imageInput.files && imageInput.files[0]) {
