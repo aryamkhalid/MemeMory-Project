@@ -11,8 +11,7 @@ import {
     where,
     getDocs,
     getDoc,
-    updateDoc,
-    deleteDoc
+    updateDoc
 } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
 
 // Save a new meme using the agreed Firestore fields.
