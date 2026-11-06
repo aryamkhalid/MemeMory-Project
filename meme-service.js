@@ -100,32 +100,50 @@ export async function updateMeme(memeId, { title, description, courseTag }) {
     });
 }
 
- // Delete Meme - Only the post owner can delete it.
-export async function deleteMeme(memeId) {
-    const user = await getCurrentUser();
+     // Delete Meme - Only the post owner can delete it.
+    export async function deleteMeme(memeId) {
+        const user = await getCurrentUser();
+    
+        if (!user) {
+            throw new Error("Please log in first.");
+        }
+    
+        if (!memeId) {
+            throw new Error("Invalid meme ID.");
+        }
+    
+        const memeRef = doc(db, "memes", memeId);
+        const memeSnapshot = await getDoc(memeRef);
+    
+        if (!memeSnapshot.exists()) {
+            throw new Error("Meme not found.");
+        }
+    
+        // Prevent users from deleting someone else's post.
+        if (memeSnapshot.data().authorId !== user.uid) {
+            throw new Error("You can only delete your own memes.");
+        }
+    
+    
+        // Delete the image and meme through the secure Cloudflare Worker.
+        const response = await fetch(
+            "https://mememory-delete.jood0505ali.workers.dev/delete-meme",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${await user.getIdToken()}`
+                },
+                body: JSON.stringify({ memeId })
+            }
+        );
+    
+        const result = await response.json();
+    
+        if (!response.ok) {
+            throw new Error(result.error || "Meme deletion failed.");
+        }
 
-    if (!user) {
-        throw new Error("Please log in first.");
-    }
-
-    if (!memeId) {
-        throw new Error("Invalid meme ID.");
-    }
-
-    const memeRef = doc(db, "memes", memeId);
-    const memeSnapshot = await getDoc(memeRef);
-
-    if (!memeSnapshot.exists()) {
-        throw new Error("Meme not found.");
-    }
-
-    // Prevent users from deleting someone else's post.
-    if (memeSnapshot.data().authorId !== user.uid) {
-        throw new Error("You can only delete your own memes.");
-    }
-
-    // Delete the meme document from Firestore.
-    await deleteDoc(memeRef);
 }
 
 
