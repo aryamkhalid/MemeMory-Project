@@ -6,7 +6,10 @@ import {
     collection,
     doc,
     setDoc,
-    serverTimestamp
+    serverTimestamp,
+    query,
+    where,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
 
 // Save a new meme using the agreed Firestore fields.
@@ -36,3 +39,25 @@ export async function createMeme({ title, description, courseTag, imageUrl }) {
 
     return memeRef.id;
 }
+
+ // Get only the posts created by the logged-in user.
+export async function getMyMemes() {
+    const user = await getCurrentUser();
+
+    if (!user) {
+        throw new Error("Please log in first.");
+    }
+
+    const myMemesQuery = query(
+        collection(db, "memes"),
+        where("authorId", "==", user.uid)
+    );
+
+    const snapshot = await getDocs(myMemesQuery);
+
+    return snapshot.docs.map((memeDoc) => ({
+        memeId: memeDoc.id,
+        ...memeDoc.data()
+    }));
+}
+
