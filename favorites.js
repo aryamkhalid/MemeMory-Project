@@ -4,7 +4,6 @@ import { getCurrentUser } from "./auth.js";
 
 import {
   doc,
-  getDoc,
   setDoc,
   deleteDoc,
   serverTimestamp,
@@ -44,35 +43,6 @@ export async function removeFavorite(memeId) {
   await deleteDoc(doc(db, "favorites", favoriteId));
 }
 
-// Check whether a meme is already a favorite
-export async function isFavorite(memeId) {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    return false;
-  }
-
-  const favoriteId = `${user.uid}_${memeId}`;
-  const favoriteDoc = await getDoc(
-    doc(db, "favorites", favoriteId)
-  );
-
-  return favoriteDoc.exists();
-}
-
-// Toggle favorite on or off
-export async function toggleFavorite(memeId) {
-  const saved = await isFavorite(memeId);
-
-  if (saved) {
-    await removeFavorite(memeId);
-    return false;
-  }
-
-  await addFavorite(memeId);
-  return true;
-}
-
 // Get favorites belonging to the current user
 export async function getFavoriteIds() {
   const user = await getCurrentUser();
@@ -91,6 +61,31 @@ export async function getFavoriteIds() {
   return snapshot.docs
     .map((favorite) => favorite.data().memeId)
     .filter(Boolean);
+}
+
+// Check whether a meme is already a favorite
+export async function isFavorite(memeId) {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    return false;
+  }
+
+  const favoriteIds = await getFavoriteIds();
+  return favoriteIds.includes(memeId);
+}
+
+// Toggle favorite on or off
+export async function toggleFavorite(memeId) {
+  const saved = await isFavorite(memeId);
+
+  if (saved) {
+    await removeFavorite(memeId);
+    return false;
+  }
+
+  await addFavorite(memeId);
+  return true;
 }
 
 // Update the appearance and state of favorite buttons
@@ -114,12 +109,14 @@ function updateFavoriteButtons(memeId, saved) {
 
 // Load saved states when memes appear
 async function refreshFavoriteButtons() {
+  const buttons = document.querySelectorAll(
+    '[data-action="favorite"][data-meme-id]'
+  );
+
+  if (!buttons.length) return;
+
   try {
     const favoriteIds = new Set(await getFavoriteIds());
-
-    const buttons = document.querySelectorAll(
-      '[data-action="favorite"][data-meme-id]'
-    );
 
     buttons.forEach((button) => {
       const saved = favoriteIds.has(button.dataset.memeId);
