@@ -122,10 +122,15 @@ async function refreshFavoriteButtons() {
     );
 
     buttons.forEach((button) => {
-      updateFavoriteButtons(
-        button.dataset.memeId,
-        favoriteIds.has(button.dataset.memeId)
-      );
+      const saved = favoriteIds.has(button.dataset.memeId);
+
+      button.setAttribute("aria-pressed", String(saved));
+      button.title = saved
+        ? "Remove from favorites"
+        : "Add to favorites";
+
+      button.setAttribute("aria-label", button.title);
+      button.classList.toggle("is-favorite", saved);
     });
   } catch (error) {
     console.error("Unable to load favorite states:", error);
@@ -146,6 +151,20 @@ window.addEventListener(
   "mememory:memes-loaded",
   refreshFavoriteButtons
 );
+
+// Refresh buttons after search or filtering recreates cards
+const memesContainer = document.getElementById("memesContainer");
+
+if (memesContainer) {
+  const observer = new MutationObserver(() => {
+    refreshFavoriteButtons();
+  });
+
+  observer.observe(memesContainer, {
+    childList: true,
+    subtree: false
+  });
+}
 
 // Initialize buttons already present on the page
 if (document.querySelector('[data-action="favorite"]')) {
