@@ -67,9 +67,7 @@ export async function getFavoriteIds() {
 export async function isFavorite(memeId) {
   const user = await getCurrentUser();
 
-  if (!user) {
-    return false;
-  }
+  if (!user) return false;
 
   const favoriteIds = await getFavoriteIds();
   return favoriteIds.includes(memeId);
@@ -88,7 +86,44 @@ export async function toggleFavorite(memeId) {
   return true;
 }
 
-// Update the appearance and state of favorite buttons
+// Display an empty or red heart
+function updateFavoriteButton(button, saved) {
+  button.setAttribute("aria-pressed", String(saved));
+
+  button.title = saved
+    ? "Remove from favorites"
+    : "Add to favorites";
+
+  button.setAttribute("aria-label", button.title);
+  button.classList.toggle("is-favorite", saved);
+
+  // Replace only the favorite icon, not other buttons
+  let heart = button.querySelector(".favorite-heart");
+
+  if (!heart) {
+    const oldIcon = button.querySelector("img");
+
+    if (oldIcon) {
+      oldIcon.remove();
+    }
+
+    heart = document.createElement("span");
+    heart.className = "favorite-heart";
+    heart.setAttribute("aria-hidden", "true");
+
+    button.appendChild(heart);
+  }
+
+  heart.textContent = saved ? "♥" : "♡";
+  heart.style.color = saved ? "#e53935" : "#333333";
+  heart.style.fontSize = "25px";
+  heart.style.fontFamily = "Arial, sans-serif";
+  heart.style.fontWeight = "normal";
+  heart.style.lineHeight = "1";
+  heart.style.display = "inline-block";
+}
+
+// Update matching buttons after clicking
 function updateFavoriteButtons(memeId, saved) {
   const buttons = document.querySelectorAll(
     '[data-action="favorite"][data-meme-id]'
@@ -97,13 +132,7 @@ function updateFavoriteButtons(memeId, saved) {
   buttons.forEach((button) => {
     if (button.dataset.memeId !== memeId) return;
 
-    button.setAttribute("aria-pressed", String(saved));
-    button.title = saved
-      ? "Remove from favorites"
-      : "Add to favorites";
-
-    button.setAttribute("aria-label", button.title);
-    button.classList.toggle("is-favorite", saved);
+    updateFavoriteButton(button, saved);
   });
 }
 
@@ -119,22 +148,18 @@ async function refreshFavoriteButtons() {
     const favoriteIds = new Set(await getFavoriteIds());
 
     buttons.forEach((button) => {
+      // Skip buttons removed during search or filtering
+      if (!button.isConnected) return;
+
       const saved = favoriteIds.has(button.dataset.memeId);
-
-      button.setAttribute("aria-pressed", String(saved));
-      button.title = saved
-        ? "Remove from favorites"
-        : "Add to favorites";
-
-      button.setAttribute("aria-label", button.title);
-      button.classList.toggle("is-favorite", saved);
+      updateFavoriteButton(button, saved);
     });
   } catch (error) {
     console.error("Unable to load favorite states:", error);
   }
 }
 
-// Connect with feed.js
+// Connect with the existing feed.js
 window.MemeMoryFavorites = {
   toggleFavorite: async (memeId) => {
     const saved = await toggleFavorite(memeId);
