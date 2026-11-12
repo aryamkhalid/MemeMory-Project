@@ -7,7 +7,11 @@ import {
   getDoc,
   setDoc,
   deleteDoc,
-  serverTimestamp
+  serverTimestamp,
+  collection,
+  query,
+  where,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
 
 // Add a meme to favorites
@@ -67,4 +71,83 @@ export async function toggleFavorite(memeId) {
 
   await addFavorite(memeId);
   return true;
+}
+
+// Get favorites belonging to the current user
+export async function getFavoriteIds() {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    throw new Error("Please log in first.");
+  }
+
+  const favoritesQuery = query(
+    collection(db, "favorites"),
+    where("userId", "==", user.uid)
+  );
+
+  const snapshot = await getDocs(favoritesQuery);
+
+  return snapshot.docs
+    .map((favorite) => favorite.data().memeId)
+    .filter(Boolean);
+}
+
+// Update the appearance and state of favorite buttons
+function updateFavoriteButtons(memeId, saved) {
+  const buttons = document.querySelectorAll(
+    '[data-action="favorite"][data-meme-id]'
+  );
+
+  buttons.forEach((button) => {
+    if (button.dataset.memeId !== memeId) return;
+
+    button.setAttribute("aria-pressed", String(saved));
+    button.title = saved
+      ? "Remove from favorites"
+      : "Add to favorites";
+
+    button.setAttribute("aria-label", button.title);
+    button.classList.toggle("is-favorite", saved);
+  });
+}
+
+// Load saved states when memes appear
+async function refreshFavoriteButtons() {
+  try {
+    const favoriteIds = new Set(await getFavoriteIds());
+
+    const buttons = document.querySelectorAll(
+      '[data-action="favorite"][data-meme-id]'
+    );
+
+    buttons.forEach((button) => {
+      updateFavoriteButtons(
+        button.dataset.memeId,
+        favoriteIds.has(button.dataset.memeId)
+      );
+    });
+  } catch (error) {
+    console.error("Unable to load favorite states:", error);
+  }
+}
+
+// Connect with feed.js
+window.MemeMoryFavorites = {
+  toggleFavorite: async (memeId) => {
+    const saved = await toggleFavorite(memeId);
+    updateFavoriteButtons(memeId, saved);
+    return saved;
+  }
+};
+
+// Refresh buttons after Home Feed loads
+window.addEventListener(
+  "mememory:memes-loaded",
+  refreshFavoriteButtons
+);
+
+// Initialize buttons already present on the page
+if (document.querySelector('[data-action="favorite"]')) {
+  refreshFavoriteButtons();
 }
