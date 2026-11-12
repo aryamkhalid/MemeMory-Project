@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,18 +9,27 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
-        /* Match the original Profile bottom navigation */
+        /* Keep the Home navigation fixed at the bottom */
         .app-container.feed-shell {
-            min-height: 95vh;
-            justify-content: space-between;
+            min-height: 100vh;
+            min-height: 100dvh;
+            justify-content: flex-start;
+            padding-bottom: 85px;
         }
 
         .feed-navbar {
-            position: static;
-            bottom: auto;
-            margin-top: 25px;
-            padding: 12px 0 0;
-            flex-shrink: 0;
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 485px;
+            margin-top: 0;
+            padding: 12px 15px;
+            padding-bottom: max(12px, env(safe-area-inset-bottom));
+            background-color: #ffffff;
+            border-top: 1px solid #cccccc;
+            z-index: 100;
         }
     </style>
 </head>
