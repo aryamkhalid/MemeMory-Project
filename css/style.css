@@ -523,3 +523,25 @@ body {
 #favoritesError[hidden] {
     display: none;
 }
+
+/* Responsive layout and consistent bottom navigation */
+@media (max-width: 600px) {
+    body {
+        align-items: stretch;
+    }
+
+    .app-container {
+        min-height: 100vh;
+        min-height: 100dvh;
+    }
+
+    .bottom-navbar {
+        flex-shrink: 0;
+        margin-top: auto;
+    }
+
+    .feed-navbar {
+        flex-shrink: 0;
+        margin-top: auto;
+    }
+}
