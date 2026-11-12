@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,8 +29,15 @@
 
             </div>
 
+            <!-- Loading State -->
+            <p id="favoritesLoading"
+               style="text-align: center; margin-top: 60px; color: #666; font-size: 14px;">
+                Loading favorites...
+            </p>
+
             <!-- Empty State -->
-            <div style="text-align: center; margin-top: 80px; color: #666;">
+            <div id="favoritesEmpty" hidden
+                 style="text-align: center; margin-top: 80px; color: #666;">
 
                 <div style="font-size: 40px; margin-bottom: 10px;">
                     ♡
@@ -44,6 +52,16 @@
                 </p>
 
             </div>
+
+            <!-- Error State -->
+            <p id="favoritesError" hidden
+               role="alert"
+               style="text-align: center; margin-top: 60px; color: #b00020; font-size: 14px;">
+                Unable to load favorites. Please try again.
+            </p>
+
+            <!-- Saved Memes -->
+            <div id="favoritesContainer" class="memes-container"></div>
 
         </div>
 
@@ -67,6 +85,8 @@
     </div>
 
     <script type="module" src="auth.js"></script>
+    <script type="module" src="favorites.js"></script>
+    <script type="module" src="favorites-page.js"></script>
 
 </body>
 </html>
