@@ -46,11 +46,17 @@ function createFavoriteCard(meme) {
   removeButton.className = "meme-action-button is-favorite";
   removeButton.title = "Remove from favorites";
   removeButton.setAttribute("aria-label", removeButton.title);
+  removeButton.setAttribute("aria-pressed", "true");
 
-  const icon = document.createElement("img");
-  icon.src = "images/like-icon.png";
-  icon.alt = "";
-  removeButton.appendChild(icon);
+  // Red heart for saved memes
+  const heart = document.createElement("span");
+  heart.textContent = "♥";
+  heart.setAttribute("aria-hidden", "true");
+  heart.style.color = "#e53935";
+  heart.style.fontSize = "25px";
+  heart.style.lineHeight = "1";
+
+  removeButton.appendChild(heart);
 
   removeButton.addEventListener("click", async () => {
     removeButton.disabled = true;
