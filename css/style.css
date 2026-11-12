@@ -1,3 +1,4 @@
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -503,4 +504,22 @@ body {
     .meme-card-image {
         height: 185px;
     }
+}
+
+/* Favorites - saved meme indicator */
+.meme-action-button.is-favorite {
+    background-color: #e8f1ff;
+    border-radius: 5px;
+}
+
+.meme-action-button.is-favorite img {
+    opacity: 1;
+    filter: brightness(0) saturate(100%) invert(30%) sepia(95%) saturate(1800%) hue-rotate(205deg);
+}
+
+/* Keep hidden Favorites states invisible */
+#favoritesLoading[hidden],
+#favoritesEmpty[hidden],
+#favoritesError[hidden] {
+    display: none;
 }
