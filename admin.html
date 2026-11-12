@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>MemeMory - Admin Moderation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="admin-page" data-protected="true">
+    <div class="app-container admin-shell">
+        <main class="admin-main">
+            <header class="admin-header">
+                <a href="home.html" class="details-back">
+                    &larr; Home
+                </a>
+                <h1>Admin Moderation</h1>
+            </header>
+
+            <div id="adminStatus"
+                 class="feed-status"
+                 role="status"
+                 aria-live="polite">
+                Checking admin access...
+            </div>
+
+            <section id="adminContent" hidden>
+                <h2>Reported Memes</h2>
+                <div id="reportsList"></div>
+            </section>
+        </main>
+
+        <nav class="bottom-navbar feed-navbar"
+             aria-label="Main navigation">
+            <a href="home.html" class="nav-link">
+                <img src="images/home-icon.png" alt="Home">
+            </a>
+            <a href="profile.html" class="nav-link">
+                <img src="images/profile-icon.png" alt="Profile">
+            </a>
+        </nav>
+    </div>
+
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="admin.js"></script>
+</body>
+</html>
