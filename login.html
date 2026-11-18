@@ -129,15 +129,20 @@
     </div>
 
     <script type="module">
-        import { auth } from "./firebase-config.js";
+        import { auth, db } from "./firebase-config.js";
 
         import {
-            signInWithEmailAndPassword
+            signInWithEmailAndPassword,
+            signOut
         } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
 
-        const ADMIN_EMAIL = "lalserhani2005@hotmail.com";
+        import {
+            doc,
+            getDoc
+        } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
 
         const loginForm = document.getElementById("loginForm");
+        const loginButton = loginForm.querySelector('button[type="submit"]');
 
         loginForm.addEventListener("submit", async (event) => {
             event.preventDefault();
@@ -153,25 +158,59 @@
                 return;
             }
 
+            loginButton.disabled = true;
+
             try {
-                const result =
-                    await signInWithEmailAndPassword(
-                        auth,
-                        email,
-                        password
-                    );
+                // Authenticate user with Firebase.
+                const result = await signInWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
+                );
 
-                const loggedInEmail =
-                    result.user.email.toLowerCase();
+                // Retrieve the user's role from Firestore.
+                const userDoc = await getDoc(
+                    doc(db, "users", result.user.uid)
+                );
 
-                if (loggedInEmail === ADMIN_EMAIL) {
+                if (!userDoc.exists()) {
+                    throw new Error("User profile not found.");
+                }
+
+                const role = userDoc.data().role;
+
+                // Redirect based on the user's role.
+                if (role === "admin") {
                     window.location.replace("admin.html");
-                } else {
+
+                } else if (role === "student") {
                     window.location.replace("home.html");
+
+                } else {
+                    throw new Error("Invalid user role.");
                 }
 
             } catch (error) {
-                alert("Incorrect email or password.");
+                console.error("Login error:", error);
+
+                // Keep users with missing or invalid profiles
+                // from continuing into the application.
+                if (
+                    error.message === "User profile not found." ||
+                    error.message === "Invalid user role."
+                ) {
+                    await signOut(auth).catch(console.error);
+                }
+
+                alert(
+                    error.message === "User profile not found." ||
+                    error.message === "Invalid user role."
+                        ? error.message
+                        : "Unable to log in. Please check your credentials and try again."
+                );
+
+            } finally {
+                loginButton.disabled = false;
             }
         });
     </script>
