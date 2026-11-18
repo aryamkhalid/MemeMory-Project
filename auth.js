@@ -12,6 +12,7 @@ import {
 import {
   doc,
   setDoc,
+  getDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
 
@@ -90,8 +91,26 @@ if (loginForm) {
     }
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      window.location.href = "home.html";
+      const result = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const userDocument = await getDoc(
+        doc(db, "users", result.user.uid)
+      );
+
+      const role = userDocument.exists()
+        ? userDocument.data().role
+        : "student";
+
+      if (role === "admin") {
+        window.location.href = "admin.html";
+      } else {
+        window.location.href = "home.html";
+      }
+
     } catch (error) {
       alert("Incorrect email or password.");
     }
@@ -121,6 +140,7 @@ if (resetForm) {
       );
 
       window.location.href = "login.html";
+
     } catch (error) {
       alert("Unable to send the reset link. Please try again.");
     }
@@ -134,6 +154,7 @@ const logoutButton = document.getElementById("logoutButton");
 if (logoutButton) {
   logoutButton.addEventListener("click", async (event) => {
     event.preventDefault();
+
     await signOut(auth);
     window.location.href = "login.html";
   });
