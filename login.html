@@ -2,56 +2,178 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>MemeMory - Login</title>
+
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-    <div class="app-container" style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 90vh; max-width: 400px; margin: 0 auto; padding: 20px;">
-        
-        <!-- Logo Only -->
-        <div style="margin-bottom: 30px; text-align: center;">
+    <div class="app-container"
+         style="display:flex;
+                flex-direction:column;
+                justify-content:center;
+                align-items:center;
+                min-height:90vh;
+                max-width:400px;
+                margin:0 auto;
+                padding:20px;">
+
+        <div style="margin-bottom:30px; text-align:center;">
             <a href="index.html">
-                <img src="images/logo.png" alt="MemeMory Logo" style="height: 50px; width: auto; display: block; margin: 0 auto;">
+                <img src="images/logo.png"
+                     alt="MemeMory Logo"
+                     style="height:50px;
+                            width:auto;
+                            display:block;
+                            margin:0 auto;">
             </a>
         </div>
 
-        <!-- Login Form Container -->
-        <div style="width: 100%; background-color: #fff; border: 1px solid #ddd; border-radius: 10px; padding: 20px; box-sizing: border-box;">
-            <!-- Form uses JavaScript handler to validate login -->
-            <form id="loginForm" style="display: flex; flex-direction: column; gap: 15px;">
-                
-                <!-- Email Field -->
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="font-size: 13px; font-weight: 600; color: #333;">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email" required style="padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; outline: none;">
+        <div style="width:100%;
+                    background-color:#fff;
+                    border:1px solid #ddd;
+                    border-radius:10px;
+                    padding:20px;
+                    box-sizing:border-box;">
+
+            <form id="loginForm"
+                  style="display:flex;
+                         flex-direction:column;
+                         gap:15px;">
+
+                <div style="display:flex;
+                            flex-direction:column;
+                            gap:5px;">
+
+                    <label for="email"
+                           style="font-size:13px;
+                                  font-weight:600;
+                                  color:#333;">
+                        Email
+                    </label>
+
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           placeholder="Enter your email"
+                           required
+                           style="padding:10px;
+                                  border-radius:6px;
+                                  border:1px solid #ccc;
+                                  font-size:14px;">
                 </div>
 
-                <!-- Password Field -->
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="font-size: 13px; font-weight: 600; color: #333;">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter password" required style="padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; outline: none;">
-                    
-                    <!-- Forgot Password Under Password Input -->
-                    <div style="text-align: right; margin-top: 2px;">
-                        <a href="forgot-password.html" style="font-size: 11px; color: #007bff; text-decoration: none;">Forgot Password?</a>
+                <div style="display:flex;
+                            flex-direction:column;
+                            gap:5px;">
+
+                    <label for="password"
+                           style="font-size:13px;
+                                  font-weight:600;
+                                  color:#333;">
+                        Password
+                    </label>
+
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           placeholder="Enter password"
+                           required
+                           style="padding:10px;
+                                  border-radius:6px;
+                                  border:1px solid #ccc;
+                                  font-size:14px;">
+
+                    <div style="text-align:right; margin-top:2px;">
+                        <a href="forgot-password.html"
+                           style="font-size:11px;
+                                  color:#007bff;
+                                  text-decoration:none;">
+                            Forgot Password?
+                        </a>
                     </div>
                 </div>
 
-                <!-- Submit Button -->
-                <button type="submit" style="margin-top: 10px; padding: 11px; background-color: #007bff; color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer;">
+                <button type="submit"
+                        style="margin-top:10px;
+                               padding:11px;
+                               background-color:#007bff;
+                               color:#fff;
+                               border:none;
+                               border-radius:6px;
+                               font-size:14px;
+                               font-weight:600;
+                               cursor:pointer;">
                     Log In
                 </button>
             </form>
         </div>
 
-        <!-- Link to Register -->
-        <div style="margin-top: 20px; font-size: 13px; color: #555; text-align: center;">
-            Don't have an account? <a href="register.html" style="color: #007bff; font-weight: 600; text-decoration: none;">Register</a>
-        </div>
+        <div style="margin-top:20px;
+                    font-size:13px;
+                    color:#555;
+                    text-align:center;">
 
+            Don't have an account?
+
+            <a href="register.html"
+               style="color:#007bff;
+                      font-weight:600;
+                      text-decoration:none;">
+                Register
+            </a>
+        </div>
     </div>
 
-<script type="module" src="auth.js"></script>
+    <script type="module">
+        import { auth } from "./firebase-config.js";
+
+        import {
+            signInWithEmailAndPassword
+        } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
+
+        const ADMIN_EMAIL = "lalserhani2005@hotmail.com";
+
+        const loginForm = document.getElementById("loginForm");
+
+        loginForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const email =
+                document.getElementById("email").value.trim();
+
+            const password =
+                document.getElementById("password").value;
+
+            if (!email || !password) {
+                alert("Please fill in all required fields.");
+                return;
+            }
+
+            try {
+                const result =
+                    await signInWithEmailAndPassword(
+                        auth,
+                        email,
+                        password
+                    );
+
+                const loggedInEmail =
+                    result.user.email.toLowerCase();
+
+                if (loggedInEmail === ADMIN_EMAIL) {
+                    window.location.replace("admin.html");
+                } else {
+                    window.location.replace("home.html");
+                }
+
+            } catch (error) {
+                alert("Incorrect email or password.");
+            }
+        });
+    </script>
 </body>
 </html>
